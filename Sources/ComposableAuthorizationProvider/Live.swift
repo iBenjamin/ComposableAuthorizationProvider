@@ -195,7 +195,7 @@ extension AuthorizationControllerClient {
         }
     }
 #endif
-    private class Observer: NSObject, ASAuthorizationControllerDelegate {
+    private class Observer: NSObject, ASAuthorizationControllerDelegate, Sendable {
         let continuation: AsyncThrowingStream<AuthorizationEvent, Error>.Continuation
 
         init(continuation: AsyncThrowingStream<AuthorizationEvent, Error>.Continuation) {

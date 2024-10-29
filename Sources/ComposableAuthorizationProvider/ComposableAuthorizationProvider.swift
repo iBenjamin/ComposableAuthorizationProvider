@@ -9,7 +9,7 @@ import AuthenticationServices
 import ComposableArchitecture
 
 /// Client for interfacing with [AuthenticationServices](https://developer.apple.com/documentation/authenticationservices).
-public struct AuthorizationControllerClient {
+public struct AuthorizationControllerClient: Sendable {
     /// Performs an [ASAuthorizationAppleIDRequest](https://developer.apple.com/documentation/authenticationservices/asauthorizationappleidrequest) with the given ``RequestOptions``
     public var performRequest: @Sendable (RequestOptions) async throws -> AuthorizationEvent
     /// Performs an [ASAuthorizationAppleIDRequest](https://developer.apple.com/documentation/authenticationservices/asauthorizationappleidrequest) for an existing account
@@ -26,7 +26,7 @@ public struct AuthorizationControllerClient {
     #endif
 
     /// Events for wrapping the [ASAuthorizationControllerDelegate](https://developer.apple.com/documentation/authenticationservices/asauthorizationcontrollerdelegate)
-    public enum AuthorizationEvent: Equatable {
+    public enum AuthorizationEvent: Equatable, Sendable {
         case register(ASAuthorizationAppleIDCredential)
         case signIn(ASAuthorizationAppleIDCredential)
         case signInPassword(ASPasswordCredential)
@@ -37,7 +37,7 @@ public struct AuthorizationControllerClient {
     }
 
     /// The configurable options for the [ASAuthorizationAppleIDRequest](https://developer.apple.com/documentation/authenticationservices/asauthorizationappleidrequest)
-    public struct RequestOptions: Equatable {
+    public struct RequestOptions: Equatable, Sendable {
         public var operation: ASAuthorization.OpenIDOperation
         public var scopes: [ASAuthorization.Scope]
 
@@ -50,7 +50,7 @@ public struct AuthorizationControllerClient {
         }
 
         /// The standard options
-        public static let standard = Self(
+      public static let standard = Self(
             operation: .operationImplicit,
             scopes: [.fullName, .email]
         )
@@ -58,11 +58,11 @@ public struct AuthorizationControllerClient {
 }
 
 /// This object provides the basic functionality for the [Sign in with Apple](https://developer.apple.com/documentation/authenticationservices/implementing_user_authentication_with_sign_in_with_apple) authorization flow.
-public struct AuthorizationProvider {
+public struct AuthorizationProvider: Sendable {
     public var authorizationController: AuthorizationControllerClient
     public var getCredentialState: @Sendable (String) async throws -> State
 
-    public struct State: Equatable {
+    public struct State: Equatable, Sendable {
         public var credentialState: ASAuthorizationAppleIDProvider.CredentialState
 
         init(

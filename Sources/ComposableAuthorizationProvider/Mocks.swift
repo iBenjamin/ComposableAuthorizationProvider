@@ -85,7 +85,7 @@ extension AuthorizationControllerClient {
 
     public static let failing = Self(
         performRequest: { options in
-            unimplemented("\(Self.self).performRequest")
+          unimplemented(placeholder: .didFailWithError(.init(domain: "\(Self.self).performRequest", code: 0)))
         },
         performExistingAccountSetup: unimplemented("\(Self.self).performExistingAccountSetup"),
         updatePresentationContext: { window in
